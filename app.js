@@ -12,8 +12,13 @@ app.get("/items", (req, res) => {
 
 app.delete("/items/:itemId", (req, res) => {
   const { itemId } = req.params;
-  items = items.filter((item) => item.id !== +itemId);
-  console.log("REQUEST", req.params);
+  const founditem = items.find((item) => item.id === +itemId);
+  if (founditem) {
+    items = items.filter((item) => item.id !== +itemId);
+    console.log("REQUEST", req.params);
+    res.status(204).end();
+  }
+  res.status(404).res.json({ message: "item not found" });
 });
 
 app.listen(8000, () => {
