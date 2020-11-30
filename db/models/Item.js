@@ -11,8 +11,7 @@ module.exports = (sequelize, DataTypes) => {
       unique: true,
     },
     price: {
-      type: DataTypes.INTEGER,
-      defaultValue: 5,
+      type: DataTypes.FLOAT,
       validate: {
         min: 1,
       },

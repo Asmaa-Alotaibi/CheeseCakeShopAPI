@@ -1,45 +1,62 @@
 let items = require("../items");
 const slugify = require("slugify");
+const { Item } = require("../db/models");
 
+exports.fetchItem = async (itemId, next) => {
+  try {
+    const item = await Item.findByPk(itemId);
+    return item;
+  } catch (error) {
+    next(error);
+  }
+};
 /*get list of items*/
 
-exports.itemList = (req, res) => res.json(items);
+exports.itemList = async (req, res, next) => {
+  try {
+    const items = await Item.findAll({
+      attributes: { exclude: ["createdAt", "updatedAt"] },
+    });
+    console.log("items", items);
+    res.json(items);
+  } catch (err) {
+    next(err);
+  }
+};
 
 /* create item*/
 
-exports.itemCreate =
-  ("/",
-  (req, res) => {
-    const id = items[items.length - 1].id + 1; //generate id
-    const slug = slugify(req.body.name, { lower: true });
-    const newItem = { id, slug, ...req.body }; // id, slug are equivalent to id: id, slug: slug
-    items.push(newItem);
+exports.itemCreate = async (req, res, next) => {
+  try {
+    if (req.file) {
+      req.body.image = `http://${req.get("host")}/media/${req.file.filename}`;
+    }
+    const newItem = await Item.create(req.body);
     res.status(201).json(newItem);
-  });
+  } catch (err) {
+    next(err);
+  }
+};
 /* delete item*/
 
-exports.itemDelete =
-  ("/:itemId",
-  (req, res) => {
-    const { itemId } = req.params;
-    const founditem = items.find((item) => item.id === +itemId);
-    if (founditem) {
-      items = items.filter((item) => item.id !== +itemId);
-      console.log("REQUEST", req.params);
-      res.status(204).end();
-    }
-    res.status(404).res.json({ message: "item not found" });
-  });
+exports.itemDelete = async (req, res, next) => {
+  try {
+    await req.item.destroy();
+    res.status(204).end();
+  } catch (err) {
+    next(err);
+  }
+};
 /* Update item*/
 
-exports.itemUpdate =
-  ("/:itemId",
-  (req, res) => {
-    const { itemId } = req.params;
-    const founditem = items.find((item) => item.id === +itemId);
-    if (founditem) {
-      for (const key in req.body) founditem[key] = req.body[key];
-      res.status(204).end();
+exports.itemUpdate = async (req, res, next) => {
+  try {
+    if (req.file) {
+      req.body.image = `http://${req.get("host")}/media/${req.file.filename}`;
     }
-    res.status(204).res.json({ message: "item not found" });
-  });
+    await req.item.update(req.body);
+    res.status(204).end();
+  } catch (err) {
+    next(err);
+  }
+};

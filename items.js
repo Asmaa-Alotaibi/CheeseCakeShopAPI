@@ -4,7 +4,7 @@ const items = [
     name: "Louts cheesecake",
     slug: "louts-cheesecake",
     price: 1.25,
-    imag: "/louts.jpg",
+    image: "/louts.jpg",
     description: "  very delicuos cheessecake",
   },
   {
@@ -12,7 +12,7 @@ const items = [
     name: "Strawberry cheesecake",
     slug: "strawberry-cheesecake",
     price: 1.5,
-    imag: "/strawberry.jpg",
+    image: "/strawberry.jpg",
     description: "  very tasty cheessecake",
   },
   {
@@ -20,7 +20,7 @@ const items = [
     name: "Oreo cheesecake",
     slug: "oreo-cheesecake",
     price: 1.75,
-    imag: "/oreo.jpg",
+    image: "/oreo.jpg",
     description: "  don't miss this cheessecake",
   },
 ];
