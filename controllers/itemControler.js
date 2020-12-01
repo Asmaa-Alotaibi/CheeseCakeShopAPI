@@ -1,6 +1,6 @@
 let items = require("../items");
 const slugify = require("slugify");
-const { Item } = require("../db/models");
+const { Item, Bakery } = require("../db/models");
 
 exports.fetchItem = async (itemId, next) => {
   try {
@@ -15,7 +15,12 @@ exports.fetchItem = async (itemId, next) => {
 exports.itemList = async (req, res, next) => {
   try {
     const items = await Item.findAll({
-      attributes: { exclude: ["createdAt", "updatedAt"] },
+      attributes: { exclude: ["bakeryId", "createdAt", "updatedAt"] },
+      include: {
+        model: Bakery,
+        as: "bakery",
+        attributes: ["name"],
+      },
     });
     console.log("items", items);
     res.json(items);
@@ -24,19 +29,6 @@ exports.itemList = async (req, res, next) => {
   }
 };
 
-/* create item*/
-
-exports.itemCreate = async (req, res, next) => {
-  try {
-    if (req.file) {
-      req.body.image = `http://${req.get("host")}/media/${req.file.filename}`;
-    }
-    const newItem = await Item.create(req.body);
-    res.status(201).json(newItem);
-  } catch (err) {
-    next(err);
-  }
-};
 /* delete item*/
 
 exports.itemDelete = async (req, res, next) => {

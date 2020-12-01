@@ -26,9 +26,6 @@ router.param("itemId", async (req, res, next, itemId) => {
 /*get list of items*/
 router.get("/", itemList);
 
-/* create item*/
-router.post("/", upload.single("image"), itemCreate);
-
 /* delete item*/
 router.delete("/:itemId", itemDelete);
 
