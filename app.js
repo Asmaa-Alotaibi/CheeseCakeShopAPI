@@ -5,6 +5,7 @@ const itemRoutes = require("./routes/items");
 const db = require("./db/models");
 const path = require("path");
 const bakeryRoutes = require("./routes/bakeries");
+const userRoutes = require("./routes/users");
 const app = express();
 
 //middleware
@@ -14,6 +15,8 @@ app.use(cors());
 app.use("/items", itemRoutes);
 app.use("/media", express.static(path.join(__dirname, "media")));
 app.use("/bakeries", bakeryRoutes);
+app.use(userRoutes);
+
 // error handling
 app.use((err, req, res, next) => {
   res.status(err.status || 500);

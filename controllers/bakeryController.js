@@ -15,7 +15,7 @@ exports.fetchBakery = async (bakeryId, next) => {
 exports.bakeryList = async (req, res, next) => {
   try {
     const bakeries = await Bakery.findAll({
-      attributes: ["id", "name"],
+      attributes: ["id", "name", "image", "slug"],
       include: [
         {
           model: Item,
