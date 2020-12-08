@@ -1,6 +1,6 @@
 //let bakeries = require("../bakeries");
 const slugify = require("slugify");
-const { Bakery, Item } = require("../db/models");
+const { Bakery, Item, User } = require("../db/models");
 
 exports.fetchBakery = async (bakeryId, next) => {
   try {
@@ -21,6 +21,13 @@ exports.bakeryList = async (req, res, next) => {
           model: Item,
           as: "items",
           attributes: ["id"],
+        },
+      ],
+      include: [
+        {
+          model: User,
+          as: "owner",
+          attributes: ["username"],
         },
       ],
     });

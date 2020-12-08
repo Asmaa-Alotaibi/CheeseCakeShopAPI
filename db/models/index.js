@@ -49,4 +49,9 @@ db.Bakery.hasMany(db.Item, {
 });
 
 db.Item.belongsTo(db.Bakery, { as: "bakery" });
+
+// one-to-one relation
+
+db.User.hasOne(db.Bakery);
+db.Bakery.belongsTo(db.User, { as: "owner" });
 module.exports = db;

@@ -5,7 +5,10 @@ const itemRoutes = require("./routes/items");
 const db = require("./db/models");
 const path = require("path");
 const bakeryRoutes = require("./routes/bakeries");
+const passport = require("passport");
+const { localStrategy } = require("./middleware/passport");
 const userRoutes = require("./routes/users");
+
 const app = express();
 
 //middleware
@@ -15,6 +18,10 @@ app.use(cors());
 app.use("/items", itemRoutes);
 app.use("/media", express.static(path.join(__dirname, "media")));
 app.use("/bakeries", bakeryRoutes);
+
+// Passport Setup
+app.use(passport.initialize());
+passport.use(localStrategy);
 app.use(userRoutes);
 
 // error handling
