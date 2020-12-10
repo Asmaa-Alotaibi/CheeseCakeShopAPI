@@ -45,13 +45,13 @@ db.Sequelize = Sequelize;
 
 db.Bakery.hasMany(db.Item, {
   as: "items",
-  foreignKey: { fieldName: "bakeryId", allowNull: false },
+  foreignKey: { fieldName: "bakeryId" },
 });
 
 db.Item.belongsTo(db.Bakery, { as: "bakery" });
 
 // one-to-one relation
 
-db.User.hasOne(db.Bakery);
-db.Bakery.belongsTo(db.User, { as: "owner" });
+db.User.hasOne(db.Bakery, { as: "baker", foreignKey: "userId" });
+db.Bakery.belongsTo(db.User, { as: "owner", foreignKey: "bakeryId" });
 module.exports = db;

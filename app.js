@@ -6,7 +6,7 @@ const db = require("./db/models");
 const path = require("path");
 const bakeryRoutes = require("./routes/bakeries");
 const passport = require("passport");
-const { localStrategy } = require("./middleware/passport");
+const { localStrategy, jwtStrategy } = require("./middleware/passport");
 const userRoutes = require("./routes/users");
 
 const app = express();
@@ -22,6 +22,7 @@ app.use("/bakeries", bakeryRoutes);
 // Passport Setup
 app.use(passport.initialize());
 passport.use(localStrategy);
+passport.use(jwtStrategy);
 app.use(userRoutes);
 
 // error handling

@@ -8,6 +8,7 @@ const {
   fetchBakery,
   itemCreate,
 } = require("../controllers/bakeryController");
+const passport = require("passport");
 
 router.param("itemId", async (req, res, next, itemId) => {
   console.log(`this is me ${itemId}`);
@@ -26,7 +27,13 @@ router.param("itemId", async (req, res, next, itemId) => {
 router.get("/", bakeryList);
 
 /* create bakery*/
-router.post("/", upload.single("image"), bakeryCreate);
+
+router.post(
+  "/",
+  passport.authenticate("jwt", { session: false }),
+  upload.single("image"),
+  bakeryCreate
+);
 
 /* create item*/
 router.post("/:bakeryId/items", upload.single("image"), itemCreate);
