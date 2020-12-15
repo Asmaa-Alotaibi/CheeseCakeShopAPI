@@ -70,7 +70,7 @@ exports.itemCreate = async (req, res, next) => {
     if (req.file) {
       req.body.image = `http://${req.get("host")}/media/${req.file.filename}`;
     }
-    req.body.bakeryId = req.params.bakeryId;
+    req.body.bakeryId = req.params.bakery.id;
     const newItem = await Item.create(req.body);
     res.status(201).json(newItem);
   } catch (err) {

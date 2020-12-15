@@ -42,16 +42,20 @@ Object.keys(db).forEach((modelName) => {
 
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
-
+//one to manay relation
 db.Bakery.hasMany(db.Item, {
   as: "items",
-  foreignKey: { fieldName: "bakeryId" },
+  foreignKey: { fieldName: "bakeryId", allowNull: false },
 });
 
-db.Item.belongsTo(db.Bakery, { as: "bakery" });
+db.Item.belongsTo(db.Bakery, {
+  as: "bakery",
+  foreignKey: { fieldName: "bakeryId" },
+});
 
 // one-to-one relation
 
 db.User.hasOne(db.Bakery, { as: "baker", foreignKey: "userId" });
-db.Bakery.belongsTo(db.User, { as: "owner", foreignKey: "bakeryId" });
+db.Bakery.belongsTo(db.User, { as: "owner" });
+
 module.exports = db;
