@@ -10,8 +10,8 @@ const {
 } = require("../controllers/bakeryController");
 const passport = require("passport");
 
-router.param("itemId", async (req, res, next, itemId) => {
-  console.log(`this is me ${itemId}`);
+router.param("bakeryId", async (req, res, next, bakeryId) => {
+  console.log(`this is me ${bakeryId}`);
   const bakery = await fetchBakery(bakeryId, next);
   if (bakery) {
     req.bakery = bakery;
@@ -27,7 +27,6 @@ router.param("itemId", async (req, res, next, itemId) => {
 router.get("/", bakeryList);
 
 /* create bakery*/
-
 router.post(
   "/",
   passport.authenticate("jwt", { session: false }),
@@ -36,6 +35,11 @@ router.post(
 );
 
 /* create item*/
-router.post("/:bakeryId/items", upload.single("image"), itemCreate);
+router.post(
+  "/:bakeryId/items",
+  passport.authenticate("jwt", { session: false }),
+  upload.single("image"),
+  itemCreate
+);
 
 module.exports = router;

@@ -22,8 +22,6 @@ exports.bakeryList = async (req, res, next) => {
           as: "items",
           attributes: ["id"],
         },
-      ],
-      include: [
         {
           model: User,
           as: "owner",
@@ -39,7 +37,6 @@ exports.bakeryList = async (req, res, next) => {
 };
 
 /* create bakery*/
-
 exports.bakeryCreate = async (req, res, next) => {
   try {
     const foundBakery = await Bakery.findOne({
@@ -64,15 +61,21 @@ exports.bakeryCreate = async (req, res, next) => {
 };
 
 /* create item*/
-
 exports.itemCreate = async (req, res, next) => {
+  console.log("TCL: exports.itemCreate -> req.user", req.bakery);
   try {
-    if (req.file) {
-      req.body.image = `http://${req.get("host")}/media/${req.file.filename}`;
+    if (req.user.id === req.bakery.userId) {
+      if (req.file) {
+        req.body.image = `http://${req.get("host")}/media/${req.file.filename}`;
+      }
+      req.body.bakeryId = req.bakery.id;
+      const newItem = await Item.create(req.body);
+      res.status(201).json(newItem);
+    } else {
+      const err = new Error("Unauthorized");
+      err.status = 401;
+      next(err);
     }
-    req.body.bakeryId = req.params.bakery.id;
-    const newItem = await Item.create(req.body);
-    res.status(201).json(newItem);
   } catch (err) {
     next(err);
   }
